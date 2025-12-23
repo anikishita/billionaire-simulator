@@ -9,6 +9,9 @@ export const TemuApp: React.FC = () => {
     const shop = state.shops.find((s) => s.id === 'future');
     const wallet = state.wallets.SimCash;
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeCategory, setActiveCategory] = useState('Best Sellers');
+
+    const categories = ['Best Sellers', 'New Arrivals', 'Home', 'Electronics', 'Fashion', 'Beauty'];
 
     const filteredProducts = shop?.products.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -71,12 +74,19 @@ export const TemuApp: React.FC = () => {
 
                         {/* Categories */}
                         <div className="bg-white p-2 sm:p-3 mb-2 flex gap-3 sm:gap-4 overflow-x-auto text-[10px] sm:text-xs font-medium text-slate-600">
-                            <span className="text-[#fb7701] font-bold border-b-2 border-[#fb7701] whitespace-nowrap">Best Sellers</span>
-                            <span className="whitespace-nowrap">New Arrivals</span>
-                            <span className="whitespace-nowrap">Home</span>
-                            <span className="whitespace-nowrap">Electronics</span>
-                            <span className="whitespace-nowrap">Fashion</span>
-                            <span className="whitespace-nowrap">Beauty</span>
+                            {categories.map((category) => (
+                                <button
+                                    key={category}
+                                    onClick={() => setActiveCategory(category)}
+                                    className={`whitespace-nowrap transition-colors cursor-pointer hover:text-[#fb7701] ${
+                                        activeCategory === category
+                                            ? 'text-[#fb7701] font-bold border-b-2 border-[#fb7701]'
+                                            : ''
+                                    }`}
+                                >
+                                    {category}
+                                </button>
+                            ))}
                         </div>
                     </>
                 )}

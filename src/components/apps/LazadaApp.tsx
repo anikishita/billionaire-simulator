@@ -59,12 +59,16 @@ export const LazadaApp: React.FC = () => {
                         {/* Icons */}
                         <div className="grid grid-cols-5 gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                             {['LazMall', 'Vouchers', 'Top Up', 'LazLive', 'Global'].map((item, i) => (
-                                <div key={i} className="flex flex-col items-center gap-1">
+                                <button 
+                                    key={i} 
+                                    className="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity cursor-pointer"
+                                    onClick={() => alert(`${item} - Coming soon!`)}
+                                >
                                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-[#0f146d]">
                                         <Star size={14} className="sm:w-4 sm:h-4" />
                                     </div>
                                     <span className="text-[9px] sm:text-[10px] text-slate-600 text-center">{item}</span>
-                                </div>
+                                </button>
                             ))}
                         </div>
 

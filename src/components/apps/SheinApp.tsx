@@ -8,6 +8,9 @@ export const SheinApp: React.FC = () => {
     const shop = state.shops.find((s) => s.id === 'global');
     const wallet = state.wallets.SimCash;
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeTab, setActiveTab] = useState('Women');
+
+    const tabs = ['Women', 'Curve', 'Kids', 'Men', 'Home', 'Beauty'];
 
     const filteredProducts = shop?.products.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -38,12 +41,19 @@ export const SheinApp: React.FC = () => {
 
             {/* Tabs */}
             <div className="flex overflow-x-auto px-2 sm:px-3 py-1.5 sm:py-2 gap-4 sm:gap-6 text-xs sm:text-sm font-medium border-b border-slate-100 sticky top-[49px] sm:top-[57px] bg-white z-10">
-                <span className="border-b-2 border-black pb-1">Women</span>
-                <span className="text-slate-400">Curve</span>
-                <span className="text-slate-400">Kids</span>
-                <span className="text-slate-400">Men</span>
-                <span className="text-slate-400">Home</span>
-                <span className="text-slate-400">Beauty</span>
+                {tabs.map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`pb-1 transition-colors cursor-pointer hover:text-black whitespace-nowrap ${
+                            activeTab === tab 
+                                ? 'border-b-2 border-black text-black' 
+                                : 'text-slate-400'
+                        }`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
 
             {/* Content */}

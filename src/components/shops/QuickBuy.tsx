@@ -67,12 +67,21 @@ export const QuickBuy: React.FC = () => {
 
             {/* Sub Header */}
             <div className="bg-[#232f3e] text-white px-2 sm:px-4 py-1 flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs font-medium overflow-x-auto">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-white/80 shrink-0">
+                <button 
+                    className="flex items-center gap-1 cursor-pointer hover:text-white/80 shrink-0"
+                    onClick={() => alert('All categories - Coming soon!')}
+                >
                     <Menu size={14} className="sm:w-4 sm:h-4" />
                     All
-                </div>
+                </button>
                 {['Today\'s Deals', 'Customer Service', 'Registry', 'Gift Cards', 'Sell'].map(item => (
-                    <span key={item} className="cursor-pointer hover:border border-white px-1 py-0.5 rounded whitespace-nowrap">{item}</span>
+                    <button 
+                        key={item} 
+                        className="cursor-pointer hover:border border-white px-1 py-0.5 rounded whitespace-nowrap transition-colors"
+                        onClick={() => alert(`${item} - Coming soon!`)}
+                    >
+                        {item}
+                    </button>
                 ))}
             </div>
 

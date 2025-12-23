@@ -51,12 +51,16 @@ export const EbayApp: React.FC = () => {
                 {/* Categories */}
                 <div className="p-3 sm:p-4 flex gap-3 sm:gap-4 overflow-x-auto">
                     {['Saved', 'Electronics', 'Motors', 'Fashion', 'Collectibles', 'Home'].map((item, i) => (
-                        <div key={i} className="flex flex-col items-center gap-1.5 sm:gap-2 min-w-[60px]">
+                        <button 
+                            key={i} 
+                            className="flex flex-col items-center gap-1.5 sm:gap-2 min-w-[60px] hover:opacity-80 transition-opacity cursor-pointer"
+                            onClick={() => alert(`${item} category - Coming soon!`)}
+                        >
                             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
                                 {/* Icon placeholder */}
                             </div>
                             <span className="text-[10px] sm:text-xs text-slate-700 font-medium text-center">{item}</span>
-                        </div>
+                        </button>
                     ))}
                 </div>
 
