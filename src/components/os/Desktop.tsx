@@ -38,7 +38,6 @@ export const Desktop: React.FC = () => {
     const [windows, setWindows] = useState<WindowState[]>([]);
     const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
     const [nextZIndex, setNextZIndex] = useState(10);
-    const [windowIdCounter, setWindowIdCounter] = useState(0);
 
     const apps = [
         { id: 'wallets', label: 'Wallet', icon: Wallet, color: 'bg-blue-600', component: <WalletApp /> },
@@ -69,7 +68,7 @@ export const Desktop: React.FC = () => {
         }
 
         // Open new window
-        const newId = `window-${windowIdCounter}`;
+        const newId = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         const newWindow: WindowState = {
             id: newId,
             appId,
@@ -86,7 +85,6 @@ export const Desktop: React.FC = () => {
         setWindows(prev => [...prev, newWindow]);
         setActiveWindowId(newWindow.id);
         setNextZIndex(prev => prev + 1);
-        setWindowIdCounter(prev => prev + 1);
     };
 
     const closeWindow = (id: string) => {

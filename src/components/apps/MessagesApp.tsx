@@ -15,7 +15,7 @@ export const MessagesApp: React.FC = () => {
     const handleSendMessage = () => {
         if (messageText.trim()) {
             // In a real app, this would send to backend
-            console.log('Sending message:', messageText);
+            // For now, just clear the input as visual feedback
             setMessageText('');
         }
     };
