@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 import { formatMoney } from '../utils/format';
 import { Lock, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -11,8 +11,8 @@ export const ShopList: React.FC = () => {
     const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
 
     const getIcon = (iconName: string) => {
-        const Icon = (Icons as any)[iconName] || Icons.ShoppingBag;
-        return Icon;
+        const IconComponent = Icons[iconName as keyof typeof Icons] as React.ComponentType<{ size?: number; className?: string }> || Icons.ShoppingBag;
+        return IconComponent;
     };
 
     if (selectedShopId) {

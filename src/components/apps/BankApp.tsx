@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGame } from '../../context/GameContext';
+import { useGame } from '../../hooks/useGame';
 import { formatMoney } from '../../utils/format';
 import { ArrowUpRight, CreditCard, PieChart, Activity } from 'lucide-react';
 

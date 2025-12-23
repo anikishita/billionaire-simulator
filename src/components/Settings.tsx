@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 import { Trash2 } from 'lucide-react';
 
 export const Settings: React.FC = () => {

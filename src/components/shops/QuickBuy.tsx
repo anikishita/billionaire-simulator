@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGame } from '../../context/GameContext';
+import { useGame } from '../../hooks/useGame';
 import { formatMoney } from '../../utils/format';
 import { Search, ShoppingCart, Menu, MapPin, Star } from 'lucide-react';
 import { clsx } from 'clsx';

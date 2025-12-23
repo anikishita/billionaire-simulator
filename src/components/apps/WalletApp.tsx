@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGame } from '../../context/GameContext';
+import { useGame } from '../../hooks/useGame';
 import { formatMoney } from '../../utils/format';
 import { Send, Smartphone, QrCode, Receipt, CreditCard, PiggyBank, ShieldCheck, LayoutGrid, Plus, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';

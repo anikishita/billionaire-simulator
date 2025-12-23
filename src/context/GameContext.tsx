@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 import type { GameContextType, GameState, WalletType } from '../types';
 import { INITIAL_STATE } from '../data/initialState';
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+export const GameContext = createContext<GameContextType | undefined>(undefined);
 
 type Action =
     | { type: 'LOAD_STATE'; payload: GameState }
@@ -21,7 +21,6 @@ const gameReducer = (state: GameState, action: Action): GameState => {
         case 'TICK': {
             // Calculate income for each wallet based on products owned in shops of that currency
             const newWallets = { ...state.wallets };
-            let totalIncome = 0;
 
             state.shops.forEach((shop) => {
                 const shopIncome = shop.products.reduce((acc, product) => {
@@ -37,7 +36,6 @@ const gameReducer = (state: GameState, action: Action): GameState => {
                             ...newWallets[walletId],
                             balance: newWallets[walletId].balance + income,
                         };
-                        totalIncome += income;
                     }
                 }
             });
@@ -52,7 +50,6 @@ const gameReducer = (state: GameState, action: Action): GameState => {
                         ...newWallets[walletId],
                         balance: newWallets[walletId].balance + passiveIncome,
                     };
-                    totalIncome += passiveIncome;
                 }
             });
 
@@ -246,12 +243,4 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             {children}
         </GameContext.Provider>
     );
-};
-
-export const useGame = () => {
-    const context = useContext(GameContext);
-    if (!context) {
-        throw new Error('useGame must be used within a GameProvider');
-    }
-    return context;
 };
