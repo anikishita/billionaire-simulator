@@ -21,8 +21,23 @@ import { EbayApp } from '../apps/EbayApp';
 import { MessagesApp } from '../apps/MessagesApp';
 import { BankApp } from '../apps/BankApp';
 
+interface WindowState {
+    id: string;
+    appId: string;
+    title: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    zIndex: number;
+    isMinimized: boolean;
+    isMaximized: boolean;
+}
+
 export const Desktop: React.FC = () => {
-    const [openApp, setOpenApp] = useState<string | null>(null);
+    const [windows, setWindows] = useState<WindowState[]>([]);
+    const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
+    const [nextZIndex, setNextZIndex] = useState(10);
 
     const apps = [
         { id: 'wallets', label: 'Wallet', icon: Wallet, color: 'bg-blue-600', component: <WalletApp /> },
@@ -37,10 +52,81 @@ export const Desktop: React.FC = () => {
         { id: 'settings', label: 'Settings', icon: Settings, color: 'bg-slate-500', component: <SettingsApp /> },
     ];
 
-    const activeApp = apps.find(app => app.id === openApp);
+    const openApp = (appId: string) => {
+        const app = apps.find(a => a.id === appId);
+        if (!app) return;
+
+        // Check if already open
+        const existingWindow = windows.find(w => w.appId === appId);
+        if (existingWindow) {
+            // Bring to front
+            focusWindow(existingWindow.id);
+            if (existingWindow.isMinimized) {
+                setWindows(prev => prev.map(w => w.id === existingWindow.id ? { ...w, isMinimized: false } : w));
+            }
+            return;
+        }
+
+        // Open new window
+        const newWindow: WindowState = {
+            id: Date.now().toString(),
+            appId,
+            title: app.label,
+            x: 100 + (windows.length * 30),
+            y: 50 + (windows.length * 30),
+            width: 800,
+            height: 600,
+            zIndex: nextZIndex,
+            isMinimized: false,
+            isMaximized: false,
+        };
+
+        setWindows(prev => [...prev, newWindow]);
+        setActiveWindowId(newWindow.id);
+        setNextZIndex(prev => prev + 1);
+    };
+
+    const closeWindow = (id: string) => {
+        setWindows(prev => prev.filter(w => w.id !== id));
+        if (activeWindowId === id) setActiveWindowId(null);
+    };
+
+    const minimizeWindow = (id: string) => {
+        setWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: true } : w));
+        setActiveWindowId(null);
+    };
+
+    const maximizeWindow = (id: string) => {
+        setWindows(prev => prev.map(w => w.id === id ? { ...w, isMaximized: !w.isMaximized } : w));
+        focusWindow(id);
+    };
+
+    const focusWindow = (id: string) => {
+        setActiveWindowId(id);
+        setWindows(prev => prev.map(w => w.id === id ? { ...w, zIndex: nextZIndex } : w));
+        setNextZIndex(prev => prev + 1);
+    };
+
+    const moveWindow = (id: string, x: number, y: number) => {
+        setWindows(prev => prev.map(w => w.id === id ? { ...w, x, y } : w));
+    };
+
+    const resizeWindow = (id: string, width: number, height: number) => {
+        setWindows(prev => prev.map(w => w.id === id ? { ...w, width, height } : w));
+    };
+
+    // Handle Click Outside (Background)
+    const handleBackgroundClick = (e: React.MouseEvent) => {
+        if (e.target === e.currentTarget) {
+            setActiveWindowId(null);
+        }
+    };
 
     return (
-        <div className="h-screen w-screen overflow-hidden bg-[url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center font-sans flex flex-col">
+        <div
+            className="h-screen w-screen overflow-hidden bg-[url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center font-sans flex flex-col"
+            onClick={handleBackgroundClick}
+        >
             <MenuBar />
 
             {/* Desktop Icons Grid */}
@@ -48,7 +134,7 @@ export const Desktop: React.FC = () => {
                 {apps.map((app) => (
                     <button
                         key={app.id}
-                        onClick={() => setOpenApp(app.id)}
+                        onClick={() => openApp(app.id)}
                         className="flex flex-col items-center gap-1 group w-20"
                     >
                         <div className={clsx(
@@ -66,20 +152,36 @@ export const Desktop: React.FC = () => {
 
             {/* Window Manager */}
             <AnimatePresence>
-                {openApp && activeApp && (
-                    <Window
-                        key="window"
-                        isOpen={!!openApp}
-                        onClose={() => setOpenApp(null)}
-                        title={activeApp.label}
-                        className={openApp === 'underground' ? 'bg-white' : 'bg-slate-50'}
-                    >
-                        {activeApp.component}
-                    </Window>
-                )}
+                {windows.map((win) => {
+                    const app = apps.find(a => a.id === win.appId);
+                    if (!app) return null;
+
+                    return (
+                        <Window
+                            key={win.id}
+                            id={win.id}
+                            title={win.title}
+                            isActive={activeWindowId === win.id}
+                            isMinimized={win.isMinimized}
+                            isMaximized={win.isMaximized}
+                            position={{ x: win.x, y: win.y }}
+                            size={{ width: win.width, height: win.height }}
+                            zIndex={win.zIndex}
+                            onClose={() => closeWindow(win.id)}
+                            onMinimize={() => minimizeWindow(win.id)}
+                            onMaximize={() => maximizeWindow(win.id)}
+                            onFocus={() => focusWindow(win.id)}
+                            onMove={(x, y) => moveWindow(win.id, x, y)}
+                            onResize={(w, h) => resizeWindow(win.id, w, h)}
+                            className={win.appId === 'underground' ? 'bg-white' : 'bg-slate-50'}
+                        >
+                            {app.component}
+                        </Window>
+                    );
+                })}
             </AnimatePresence>
 
-            <Dock items={apps} openApp={setOpenApp} />
+            <Dock items={apps} openApp={openApp} />
         </div>
     );
 };
