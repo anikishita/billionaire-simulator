@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
 import { formatMoney } from '../../utils/format';
 import { Search, ShoppingCart, Menu, ArrowRight } from 'lucide-react';
@@ -6,8 +6,14 @@ import { clsx } from 'clsx';
 
 export const EbayApp: React.FC = () => {
     const { state, buyProduct } = useGame();
-    const shop = state.shops.find((s) => s.id === 'underground'); // Using Underground for eBay (ironic?)
+    const shop = state.shops.find((s) => s.id === 'underground');
     const wallet = state.wallets.SimCash;
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredProducts = shop?.products.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
     return (
         <div className="flex flex-col h-full bg-white font-sans">
@@ -34,6 +40,8 @@ export const EbayApp: React.FC = () => {
                         type="text"
                         placeholder="Search for anything"
                         className="flex-1 bg-transparent text-sm outline-none"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
             </div>
@@ -52,29 +60,33 @@ export const EbayApp: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Hero */}
-                <div className="mx-4 mb-6 bg-blue-600 rounded-xl p-6 text-white relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h2 className="text-2xl font-bold mb-2">Daily Deals</h2>
-                        <p className="mb-4 opacity-90">Get them before they're gone.</p>
-                        <button className="bg-white text-blue-600 px-4 py-2 rounded-full font-bold text-sm hover:bg-blue-50">
-                            Shop Now
-                        </button>
+                {!searchQuery && (
+                    /* Hero */
+                    <div className="mx-4 mb-6 bg-blue-600 rounded-xl p-6 text-white relative overflow-hidden">
+                        <div className="relative z-10">
+                            <h2 className="text-2xl font-bold mb-2">Daily Deals</h2>
+                            <p className="mb-4 opacity-90">Get them before they're gone.</p>
+                            <button className="bg-white text-blue-600 px-4 py-2 rounded-full font-bold text-sm hover:bg-blue-50">
+                                Shop Now
+                            </button>
+                        </div>
+                        <div className="absolute right-0 bottom-0 w-32 h-32 bg-white/10 rounded-full translate-x-10 translate-y-10" />
                     </div>
-                    <div className="absolute right-0 bottom-0 w-32 h-32 bg-white/10 rounded-full translate-x-10 translate-y-10" />
-                </div>
+                )}
 
                 {/* Product List */}
                 <div className="px-4">
                     <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-bold text-lg text-slate-800">Recommended for you</h3>
-                        <div className="flex items-center gap-1 text-blue-600 text-sm font-bold">
-                            See all <ArrowRight size={16} />
-                        </div>
+                        <h3 className="font-bold text-lg text-slate-800">{searchQuery ? 'Results' : 'Recommended for you'}</h3>
+                        {!searchQuery && (
+                            <div className="flex items-center gap-1 text-blue-600 text-sm font-bold">
+                                See all <ArrowRight size={16} />
+                            </div>
+                        )}
                     </div>
 
                     <div className="space-y-4">
-                        {shop?.products.map((product) => {
+                        {filteredProducts.map((product) => {
                             const canAfford = wallet.balance >= product.cost;
                             return (
                                 <div key={product.id} className="flex gap-3 border-b border-slate-100 pb-4">
@@ -90,7 +102,7 @@ export const EbayApp: React.FC = () => {
                                         <div className="mt-auto flex items-center justify-between">
                                             <span className="text-xs text-red-600 font-bold">12 watching</span>
                                             <button
-                                                onClick={() => buyProduct(shop.id, product.id)}
+                                                onClick={() => buyProduct(shop?.id || 'underground', product.id)}
                                                 disabled={!canAfford}
                                                 className={clsx(
                                                     "px-4 py-1.5 rounded-full text-xs font-bold border",

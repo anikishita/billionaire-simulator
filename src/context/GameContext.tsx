@@ -42,6 +42,20 @@ const gameReducer = (state: GameState, action: Action): GameState => {
                 }
             });
 
+            // PASSIVE INCOME: 1 Million per 10 minutes (1,000,000 / 600 seconds = 1666.66/sec)
+            const PASSIVE_INCOME_PER_SEC = 1666.67;
+            Object.keys(newWallets).forEach((key) => {
+                const walletId = key as WalletType;
+                if (newWallets[walletId].unlocked) {
+                    const passiveIncome = PASSIVE_INCOME_PER_SEC * action.payload;
+                    newWallets[walletId] = {
+                        ...newWallets[walletId],
+                        balance: newWallets[walletId].balance + passiveIncome,
+                    };
+                    totalIncome += passiveIncome;
+                }
+            });
+
             // Recalculate Net Worth (sum of all wallet balances)
             const netWorth = Object.values(newWallets).reduce((acc, w) => acc + w.balance, 0);
 

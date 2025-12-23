@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
 import { formatMoney } from '../../utils/format';
 import { Search, ShoppingCart, Wallet, Star } from 'lucide-react';
@@ -6,13 +6,15 @@ import { clsx } from 'clsx';
 
 export const LazadaApp: React.FC = () => {
     const { state, buyProduct } = useGame();
-    const shop = state.shops.find((s) => s.id === 'luxury'); // Mapping Luxury to Lazada for now, or maybe create a new ID? 
-    // Wait, user wanted "identical". I should probably stick to the "MegaMall" -> Shopee/Lazada split.
-    // Let's use 'luxury' for Lazada for now as a placeholder, or maybe 'global'. 
-    // Actually, let's just use the 'luxury' shop data but style it like Lazada.
-
+    const shop = state.shops.find((s) => s.id === 'luxury');
     const products = shop?.products || [];
     const wallet = state.wallets.SimCash;
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredProducts = products.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
     return (
         <div className="flex flex-col h-full bg-[#f5f5f5] font-sans">
@@ -32,6 +34,8 @@ export const LazadaApp: React.FC = () => {
                         type="text"
                         placeholder="Search in Lazada"
                         className="flex-1 bg-transparent text-sm outline-none"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <button className="bg-[#0f146d] text-white px-4 py-1 rounded text-xs font-bold">
                         SEARCH
@@ -41,51 +45,55 @@ export const LazadaApp: React.FC = () => {
 
             {/* Content */}
             <div className="flex-1 overflow-auto p-2">
-                {/* Banner */}
-                <div className="rounded-xl overflow-hidden mb-3 shadow-sm">
-                    <img
-                        src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?q=80&w=2070&auto=format&fit=crop"
-                        alt="Sale"
-                        className="w-full h-32 object-cover"
-                    />
-                </div>
-
-                {/* Icons */}
-                <div className="grid grid-cols-5 gap-2 mb-4">
-                    {['LazMall', 'Vouchers', 'Top Up', 'LazLive', 'Global'].map((item, i) => (
-                        <div key={i} className="flex flex-col items-center gap-1">
-                            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-[#0f146d]">
-                                <Star size={16} />
-                            </div>
-                            <span className="text-[10px] text-slate-600">{item}</span>
+                {!searchQuery && (
+                    <>
+                        {/* Banner */}
+                        <div className="rounded-xl overflow-hidden mb-3 shadow-sm">
+                            <img
+                                src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?q=80&w=2070&auto=format&fit=crop"
+                                alt="Sale"
+                                className="w-full h-32 object-cover"
+                            />
                         </div>
-                    ))}
-                </div>
 
-                {/* Flash Sale */}
-                <div className="bg-white rounded-lg p-3 mb-3">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-[#f57224] font-bold">Flash Sale</span>
-                        <span className="text-[#0f146d] text-xs border border-[#0f146d] px-2 rounded-full">SHOP ALL PRODUCTS</span>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                        {products.slice(0, 3).map((product) => (
-                            <div key={product.id} className="flex flex-col">
-                                <div className="aspect-square bg-slate-100 rounded mb-1 relative">
-                                    <div className="absolute top-0 left-0 bg-[#f57224] text-white text-[8px] px-1 rounded-br">
-                                        -90%
+                        {/* Icons */}
+                        <div className="grid grid-cols-5 gap-2 mb-4">
+                            {['LazMall', 'Vouchers', 'Top Up', 'LazLive', 'Global'].map((item, i) => (
+                                <div key={i} className="flex flex-col items-center gap-1">
+                                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-[#0f146d]">
+                                        <Star size={16} />
                                     </div>
+                                    <span className="text-[10px] text-slate-600">{item}</span>
                                 </div>
-                                <span className="text-[#f57224] font-bold text-sm">₱{formatMoney(product.cost).replace('$', '')}</span>
+                            ))}
+                        </div>
+
+                        {/* Flash Sale */}
+                        <div className="bg-white rounded-lg p-3 mb-3">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[#f57224] font-bold">Flash Sale</span>
+                                <span className="text-[#0f146d] text-xs border border-[#0f146d] px-2 rounded-full">SHOP ALL PRODUCTS</span>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                            <div className="grid grid-cols-3 gap-2">
+                                {products.slice(0, 3).map((product) => (
+                                    <div key={product.id} className="flex flex-col">
+                                        <div className="aspect-square bg-slate-100 rounded mb-1 relative">
+                                            <div className="absolute top-0 left-0 bg-[#f57224] text-white text-[8px] px-1 rounded-br">
+                                                -90%
+                                            </div>
+                                        </div>
+                                        <span className="text-[#f57224] font-bold text-sm">₱{formatMoney(product.cost).replace('$', '')}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                )}
 
                 {/* Just For You */}
-                <h3 className="font-bold text-slate-700 mb-2">Just For You</h3>
+                <h3 className="font-bold text-slate-700 mb-2">{searchQuery ? 'Search Results' : 'Just For You'}</h3>
                 <div className="grid grid-cols-2 gap-2">
-                    {products.map((product) => {
+                    {filteredProducts.map((product) => {
                         const canAfford = wallet.balance >= product.cost;
                         return (
                             <div key={product.id} className="bg-white rounded-lg overflow-hidden shadow-sm flex flex-col">

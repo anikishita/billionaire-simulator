@@ -1,146 +1,146 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
 import { formatMoney } from '../../utils/format';
-import { Search, ShoppingCart, MapPin, Star, Menu } from 'lucide-react';
+import { Search, ShoppingCart, Menu, MapPin, Star } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const QuickBuy: React.FC = () => {
     const { state, buyProduct } = useGame();
     const shop = state.shops.find((s) => s.id === 'quickbuy');
     const wallet = state.wallets.SimCash;
+    const [searchQuery, setSearchQuery] = useState('');
 
-    if (!shop) return null;
+    const filteredProducts = shop?.products.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
     return (
         <div className="flex flex-col h-full bg-slate-100 font-sans">
-            {/* Navbar */}
-            <div className="bg-[#131921] text-white p-2 flex items-center gap-4 shrink-0">
-                <div className="flex flex-col leading-tight hover:outline hover:outline-1 hover:outline-white p-1 rounded cursor-pointer">
+            {/* Header */}
+            <div className="bg-[#131921] text-white p-2 flex items-center gap-2 sticky top-0 z-10">
+                <div className="flex flex-col leading-none border border-transparent hover:border-white p-1 rounded cursor-pointer">
                     <span className="text-[10px] text-slate-300">Deliver to</span>
-                    <div className="flex items-center gap-1 font-bold text-sm">
-                        <MapPin size={14} />
-                        <span>New York 10001</span>
+                    <div className="flex items-center font-bold text-xs">
+                        <MapPin size={12} />
+                        <span>Philippines</span>
                     </div>
                 </div>
 
-                <div className="flex-1 flex h-10 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-[#f90]">
-                    <button className="bg-slate-200 text-slate-700 px-3 text-xs border-r border-slate-300 hover:bg-slate-300">
+                <div className="flex-1 flex h-10 rounded overflow-hidden focus-within:ring-2 ring-[#f3a847]">
+                    <div className="bg-slate-100 text-black text-xs flex items-center px-2 border-r border-slate-300 cursor-pointer hover:bg-slate-200">
                         All
-                    </button>
+                    </div>
                     <input
                         type="text"
+                        className="flex-1 px-2 text-black outline-none"
                         placeholder="Search QuickBuy"
-                        className="flex-1 px-3 text-black focus:outline-none"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <button className="bg-[#febd69] hover:bg-[#f3a847] px-4 text-slate-900">
+                    <button className="bg-[#febd69] px-3 hover:bg-[#f3a847] text-slate-800">
                         <Search size={20} />
                     </button>
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex flex-col leading-tight cursor-pointer hover:outline hover:outline-1 hover:outline-white p-1 rounded">
-                        <span className="text-xs">Hello, Boss</span>
-                        <span className="font-bold text-sm">Account & Lists</span>
+                <div className="flex items-center gap-4 px-2">
+                    <div className="flex flex-col leading-none border border-transparent hover:border-white p-1 rounded cursor-pointer">
+                        <span className="text-[10px]">Hello, Sign in</span>
+                        <span className="font-bold text-xs">Account & Lists</span>
                     </div>
-                    <div className="flex flex-col leading-tight cursor-pointer hover:outline hover:outline-1 hover:outline-white p-1 rounded">
-                        <span className="text-xs">Returns</span>
-                        <span className="font-bold text-sm">& Orders</span>
+                    <div className="flex flex-col leading-none border border-transparent hover:border-white p-1 rounded cursor-pointer">
+                        <span className="text-[10px]">Returns</span>
+                        <span className="font-bold text-xs">& Orders</span>
                     </div>
-                    <div className="flex items-end gap-1 cursor-pointer hover:outline hover:outline-1 hover:outline-white p-1 rounded">
+                    <div className="flex items-end border border-transparent hover:border-white p-1 rounded cursor-pointer">
                         <div className="relative">
                             <ShoppingCart size={28} />
-                            <span className="absolute -top-1 -right-1 bg-[#f90] text-[#131921] text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                                0
-                            </span>
+                            <span className="absolute -top-1 -right-1 bg-[#f3a847] text-[#131921] font-bold text-[10px] w-4 h-4 flex items-center justify-center rounded-full">0</span>
                         </div>
-                        <span className="font-bold text-sm">Cart</span>
+                        <span className="font-bold text-xs mb-1">Cart</span>
                     </div>
                 </div>
             </div>
 
-            {/* Sub-navbar */}
-            <div className="bg-[#232f3e] text-white text-sm flex items-center gap-4 px-4 py-1.5 shrink-0 overflow-x-auto">
-                <button className="flex items-center gap-1 font-bold hover:outline hover:outline-1 hover:outline-white px-1 rounded">
-                    <Menu size={16} /> All
-                </button>
-                {['Today\'s Deals', 'Customer Service', 'Registry', 'Gift Cards', 'Sell'].map(item => (
-                    <button key={item} className="hover:outline hover:outline-1 hover:outline-white px-1 rounded whitespace-nowrap">
-                        {item}
-                    </button>
-                ))}
-                <div className="ml-auto font-bold hover:outline hover:outline-1 hover:outline-white px-1 rounded cursor-pointer text-[#f90]">
-                    Shop the Gaming Week Deals
+            {/* Sub Header */}
+            <div className="bg-[#232f3e] text-white px-4 py-1 flex items-center gap-4 text-xs font-medium overflow-x-auto">
+                <div className="flex items-center gap-1 cursor-pointer hover:text-white/80">
+                    <Menu size={16} />
+                    All
                 </div>
+                {['Today\'s Deals', 'Customer Service', 'Registry', 'Gift Cards', 'Sell'].map(item => (
+                    <span key={item} className="cursor-pointer hover:border border-white px-1 py-0.5 rounded whitespace-nowrap">{item}</span>
+                ))}
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-auto p-4 bg-slate-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
-                    {/* Wallet Balance Card */}
-                    <div className="bg-white p-4 rounded shadow-sm flex flex-col justify-between h-full">
-                        <h3 className="font-bold text-xl mb-2">Your SimCash Balance</h3>
-                        <div className="text-3xl font-bold text-green-600 mb-4">{formatMoney(wallet.balance)}</div>
-                        <p className="text-sm text-slate-600">Use SimCash for everyday purchases and quick deliveries.</p>
-                        <a href="#" className="text-[#007185] text-sm hover:underline mt-4">Manage Balance</a>
+            <div className="flex-1 overflow-auto p-4 max-w-[1500px] mx-auto w-full">
+                {/* Hero Banner */}
+                {!searchQuery && (
+                    <div className="relative h-64 bg-gradient-to-t from-slate-100 to-transparent -mt-4 mb-4 z-0">
+                        <img
+                            src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070&auto=format&fit=crop"
+                            alt="Banner"
+                            className="w-full h-full object-cover mask-image-gradient"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-100" />
                     </div>
+                )}
 
-                    {shop.products.map((product) => {
+                {/* Product Grid */}
+                <div className={clsx("grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative z-10", !searchQuery && "-mt-32")}>
+                    {filteredProducts.map((product) => {
                         const canAfford = wallet.balance >= product.cost;
                         return (
-                            <div key={product.id} className="bg-white p-4 rounded shadow-sm flex flex-col h-full">
-                                <div className="flex-1 mb-4 flex items-center justify-center bg-slate-50 rounded p-4">
-                                    {/* Placeholder Image */}
-                                    <div className="w-32 h-32 bg-slate-200 rounded flex items-center justify-center text-slate-400">
-                                        Image
+                            <div key={product.id} className="bg-white p-4 flex flex-col h-full border border-slate-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                                <div className="text-xl font-bold mb-1 line-clamp-1">{product.name}</div>
+                                <div className="aspect-square bg-slate-100 mb-2 flex items-center justify-center relative overflow-hidden">
+                                    {/* Placeholder for product image */}
+                                    <div className="text-slate-400 text-4xl font-bold opacity-20 group-hover:scale-110 transition-transform duration-500">
+                                        {product.name.charAt(0)}
                                     </div>
                                 </div>
 
-                                <a href="#" className="text-lg font-medium hover:text-[#c7511f] hover:underline line-clamp-2 mb-1">
-                                    {product.name} - {product.description}
-                                </a>
-
-                                <div className="flex items-center gap-1 mb-2">
-                                    <div className="flex text-[#f90]">
-                                        {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} fill="currentColor" />)}
+                                <div className="flex-1 flex flex-col gap-1">
+                                    <div className="flex items-center gap-1">
+                                        <div className="flex text-[#ffa41c]">
+                                            {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} fill="currentColor" />)}
+                                        </div>
+                                        <span className="text-xs text-blue-600 hover:underline hover:text-orange-700 cursor-pointer">12,453</span>
                                     </div>
-                                    <span className="text-[#007185] text-sm hover:underline cursor-pointer">12,403</span>
-                                </div>
 
-                                <div className="mb-2">
-                                    <span className="text-xs align-top">$</span>
-                                    <span className="text-2xl font-medium">{Math.floor(product.cost)}</span>
-                                    <span className="text-xs align-top">{(product.cost % 1).toFixed(2).substring(2)}</span>
-                                </div>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-xs align-top mt-1">$</span>
+                                        <span className="text-2xl font-medium">{formatMoney(product.cost).replace('$', '')}</span>
+                                        <span className="text-xs align-top mt-1">00</span>
+                                    </div>
 
-                                <div className="flex items-center gap-1 text-sm text-slate-600 mb-4">
-                                    <span className="text-[#007185]">FREE delivery</span>
-                                    <span className="font-bold">Tomorrow, Dec 24</span>
-                                </div>
+                                    <div className="text-xs text-slate-500 line-clamp-2 mb-2">
+                                        {product.description}
+                                    </div>
 
-                                <button
-                                    onClick={() => buyProduct(shop.id, product.id)}
-                                    disabled={!canAfford}
-                                    className={clsx(
-                                        'w-full py-1.5 rounded-full text-sm shadow-sm border border-yellow-500 transition-colors mb-2',
-                                        canAfford
-                                            ? 'bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800]'
-                                            : 'bg-slate-200 text-slate-400 cursor-not-allowed border-slate-300'
-                                    )}
-                                >
-                                    {canAfford ? 'Add to Cart' : 'Insufficient Funds'}
-                                </button>
-                                <button
-                                    onClick={() => buyProduct(shop.id, product.id)}
-                                    disabled={!canAfford}
-                                    className={clsx(
-                                        'w-full py-1.5 rounded-full text-sm shadow-sm border border-[#f08804] transition-colors',
-                                        canAfford
-                                            ? 'bg-[#ffa41c] hover:bg-[#fa8900] active:bg-[#e37b00]'
-                                            : 'bg-slate-200 text-slate-400 cursor-not-allowed border-slate-300'
-                                    )}
-                                >
-                                    {canAfford ? 'Buy Now' : 'Insufficient Funds'}
-                                </button>
+                                    <div className="text-xs mb-2">
+                                        <span className="text-[#007600] font-bold">In Stock</span>
+                                    </div>
+
+                                    <div className="mt-auto flex flex-col gap-2">
+                                        <button className="w-full bg-[#ffd814] hover:bg-[#f7ca00] border border-[#fcd200] rounded-full py-1 text-xs shadow-sm">
+                                            Add to Cart
+                                        </button>
+                                        <button
+                                            onClick={() => buyProduct(shop?.id || 'quickbuy', product.id)}
+                                            disabled={!canAfford}
+                                            className={clsx(
+                                                "w-full rounded-full py-1 text-xs shadow-sm border",
+                                                canAfford
+                                                    ? "bg-[#ffa41c] hover:bg-[#fa8900] border-[#ff8f00]"
+                                                    : "bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed"
+                                            )}
+                                        >
+                                            {canAfford ? 'Buy Now' : 'Insufficient Funds'}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         );
                     })}
