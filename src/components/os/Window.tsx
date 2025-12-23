@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, useDragControls } from 'framer-motion';
 import { X, Minus, Maximize2 } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -41,6 +41,20 @@ export const Window: React.FC<WindowProps> = ({
 }) => {
     const windowRef = useRef<HTMLDivElement>(null);
     const dragControls = useDragControls();
+
+    // Add keyboard support for closing with Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isActive) {
+                onClose();
+            }
+        };
+
+        if (isActive) {
+            window.addEventListener('keydown', handleKeyDown);
+            return () => window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [isActive, onClose]);
 
     if (isMinimized) return null;
 
@@ -87,18 +101,24 @@ export const Window: React.FC<WindowProps> = ({
                     <button
                         onClick={(e) => { e.stopPropagation(); onClose(); }}
                         className="w-3 h-3 rounded-full bg-[#ff5f57] border border-[#e0443e] flex items-center justify-center text-black/50 hover:text-black/80"
+                        aria-label="Close window"
+                        title="Close window (Esc)"
                     >
                         <X size={8} className="opacity-0 group-hover:opacity-100" />
                     </button>
                     <button
                         onClick={(e) => { e.stopPropagation(); onMinimize(); }}
                         className="w-3 h-3 rounded-full bg-[#febc2e] border border-[#d89e24] flex items-center justify-center text-black/50 hover:text-black/80"
+                        aria-label="Minimize window"
+                        title="Minimize window"
                     >
                         <Minus size={8} className="opacity-0 group-hover:opacity-100" />
                     </button>
                     <button
                         onClick={(e) => { e.stopPropagation(); onMaximize(); }}
                         className="w-3 h-3 rounded-full bg-[#28c840] border border-[#1aab29] flex items-center justify-center text-black/50 hover:text-black/80"
+                        aria-label="Maximize window"
+                        title="Maximize window"
                     >
                         <Maximize2 size={8} className="opacity-0 group-hover:opacity-100" />
                     </button>
