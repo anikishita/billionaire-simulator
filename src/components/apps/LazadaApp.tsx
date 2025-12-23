@@ -129,21 +129,21 @@ export const LazadaApp: React.FC = () => {
 
             {/* Bottom Nav */}
             <div className="bg-white border-t border-slate-200 p-2 flex justify-around text-slate-500 text-[10px]">
-                <div className="flex flex-col items-center gap-1 text-[#0f146d]">
+                <button className="flex flex-col items-center gap-1 text-[#0f146d]" onClick={() => alert('For You - Already here!')}>
                     <span className="font-bold">For You</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Feed - Coming soon!')}>
                     <span>Feed</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Messages - Coming soon!')}>
                     <span>Messages</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Cart - Coming soon!')}>
                     <span>Cart</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Account - Coming soon!')}>
                     <span>Account</span>
-                </div>
+                </button>
             </div>
         </div>
     );

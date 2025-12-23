@@ -62,12 +62,16 @@ export const ShopeeApp: React.FC = () => {
                                 { label: 'Food', icon: 'Utensils', color: 'text-yellow-500' },
                                 { label: 'Win', icon: 'Gift', color: 'text-blue-500' },
                             ].map((item, i) => (
-                                <div key={i} className="flex flex-col items-center gap-1">
+                                <button 
+                                    key={i} 
+                                    className="flex flex-col items-center gap-1"
+                                    onClick={() => alert(`${item.label} category - Coming soon!`)}
+                                >
                                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-100 flex items-center justify-center shadow-sm">
                                         <span className={clsx("font-bold text-[10px] sm:text-xs", item.color)}>{item.label}</span>
                                     </div>
                                     <span className="text-[9px] sm:text-[10px] text-slate-600">{item.label}</span>
-                                </div>
+                                </button>
                             ))}
                         </div>
 
@@ -166,26 +170,26 @@ export const ShopeeApp: React.FC = () => {
 
             {/* Bottom Nav */}
             <div className="bg-white border-t border-slate-200 p-2 flex justify-around text-slate-500 text-[10px]">
-                <div className="flex flex-col items-center gap-1 text-[#f53d2d]">
+                <button className="flex flex-col items-center gap-1 text-[#f53d2d]" onClick={() => alert('Home - Already here!')}>
                     <div className="w-6 h-6 bg-[#f53d2d] rounded-full" />
                     <span>Daily</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Mall - Coming soon!')}>
                     <div className="w-6 h-6 border border-slate-300 rounded" />
                     <span>Mall</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Live - Coming soon!')}>
                     <div className="w-6 h-6 border border-slate-300 rounded" />
                     <span>Live</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Video - Coming soon!')}>
                     <div className="w-6 h-6 border border-slate-300 rounded" />
                     <span>Video</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Me - Coming soon!')}>
                     <div className="w-6 h-6 border border-slate-300 rounded" />
                     <span>Me</span>
-                </div>
+                </button>
             </div>
         </div>
     );

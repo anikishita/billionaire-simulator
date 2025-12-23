@@ -10,6 +10,23 @@ const MESSAGES = [
 ];
 
 export const MessagesApp: React.FC = () => {
+    const [messageText, setMessageText] = React.useState('');
+
+    const handleSendMessage = () => {
+        if (messageText.trim()) {
+            // In a real app, this would send to backend
+            console.log('Sending message:', messageText);
+            setMessageText('');
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    };
+
     return (
         <div className="flex h-full bg-white font-sans overflow-hidden">
             {/* Sidebar */}
@@ -65,8 +82,21 @@ export const MessagesApp: React.FC = () => {
                 </div>
                 <div className="p-3 sm:p-4 border-t border-slate-100">
                     <div className="border border-slate-300 rounded-full px-3 sm:px-4 py-2 flex items-center gap-2">
-                        <input type="text" placeholder="iMessage" className="flex-1 outline-none text-xs sm:text-sm" />
-                        <button className="text-blue-500 font-bold text-xs sm:text-sm">Send</button>
+                        <input 
+                            type="text" 
+                            placeholder="iMessage" 
+                            className="flex-1 outline-none text-xs sm:text-sm" 
+                            value={messageText}
+                            onChange={(e) => setMessageText(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                        />
+                        <button 
+                            className="text-blue-500 font-bold text-xs sm:text-sm disabled:opacity-50"
+                            onClick={handleSendMessage}
+                            disabled={!messageText.trim()}
+                        >
+                            Send
+                        </button>
                     </div>
                 </div>
             </div>

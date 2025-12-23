@@ -33,7 +33,12 @@ export const BankApp: React.FC = () => {
                 <div className="bg-white/5 rounded-xl p-3 sm:p-4 border border-white/10">
                     <div className="flex items-center justify-between mb-4">
                         <span className="font-medium">My Cards</span>
-                        <button className="text-blue-400 text-xs sm:text-sm">Add New</button>
+                        <button 
+                            className="text-blue-400 text-xs sm:text-sm"
+                            onClick={() => alert('Add New Card - Coming soon!')}
+                        >
+                            Add New
+                        </button>
                     </div>
                     <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl p-3 sm:p-4 h-36 sm:h-40 flex flex-col justify-between relative overflow-hidden">
                         <div className="flex justify-between items-start z-10">

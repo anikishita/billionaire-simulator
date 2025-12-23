@@ -123,26 +123,26 @@ export const SheinApp: React.FC = () => {
 
             {/* Bottom Nav */}
             <div className="border-t border-slate-100 p-2 flex justify-around text-slate-400 text-[10px]">
-                <div className="flex flex-col items-center gap-1 text-black">
+                <button className="flex flex-col items-center gap-1 text-black" onClick={() => alert('Shop - Already here!')}>
                     <ShoppingBag size={20} />
                     <span>Shop</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Category - Coming soon!')}>
                     <Search size={20} />
                     <span>Category</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('New - Coming soon!')}>
                     <Zap size={20} />
                     <span>New</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Wishlist - Coming soon!')}>
                     <Heart size={20} />
                     <span>Wishlist</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Me - Coming soon!')}>
                     <User size={20} />
                     <span>Me</span>
-                </div>
+                </button>
             </div>
         </div>
     );

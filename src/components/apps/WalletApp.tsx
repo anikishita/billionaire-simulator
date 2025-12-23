@@ -8,6 +8,11 @@ export const WalletApp: React.FC = () => {
     const { state } = useGame();
     const wallet = state.wallets.SimCash; // Main wallet
 
+    const handleServiceClick = (service: string) => {
+        // In a real app, these would open modals or navigate to service pages
+        alert(`${service} feature - Coming soon!`);
+    };
+
     const services = [
         { icon: Send, label: 'Send', color: 'text-blue-600' },
         { icon: Smartphone, label: 'Load', color: 'text-blue-600' },
@@ -43,7 +48,7 @@ export const WalletApp: React.FC = () => {
                         <h1 className="text-2xl sm:text-4xl font-bold tracking-tight break-words">
                             {formatMoney(wallet.balance).replace('$', '₱ ')}
                         </h1>
-                        <button className="flex items-center gap-1 bg-white text-blue-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-sm active:scale-95 transition-transform shrink-0">
+                        <button className="flex items-center gap-1 bg-white text-blue-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-sm active:scale-95 transition-transform shrink-0" onClick={() => alert('Cash In feature coming soon!')}>
                             <Plus size={16} /> Cash In
                         </button>
                     </div>
@@ -54,7 +59,11 @@ export const WalletApp: React.FC = () => {
             <div className="flex-1 overflow-auto">
                 <div className="-mt-4 sm:-mt-6 mx-3 sm:mx-4 bg-white rounded-2xl shadow-sm p-4 sm:p-6 grid grid-cols-4 gap-y-4 sm:gap-y-6">
                     {services.map((service, index) => (
-                        <button key={index} className="flex flex-col items-center gap-1 sm:gap-2 group">
+                        <button 
+                            key={index} 
+                            className="flex flex-col items-center gap-1 sm:gap-2 group"
+                            onClick={() => handleServiceClick(service.label)}
+                        >
                             <div className={clsx(
                                 "w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 flex items-center justify-center transition-transform group-hover:scale-110 group-active:scale-95",
                                 service.color
@@ -73,7 +82,7 @@ export const WalletApp: React.FC = () => {
                             <div>
                                 <h3 className="font-bold text-base sm:text-lg">GForest</h3>
                                 <p className="text-xs sm:text-sm opacity-90">Plant a tree today!</p>
-                                <button className="mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-white/20 rounded-full text-xs font-bold hover:bg-white/30">
+                                <button className="mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-white/20 rounded-full text-xs font-bold hover:bg-white/30" onClick={() => alert('GForest game coming soon!')}>
                                     Play Now
                                 </button>
                             </div>
@@ -86,7 +95,7 @@ export const WalletApp: React.FC = () => {
                             <div>
                                 <h3 className="font-bold text-base sm:text-lg">GLife</h3>
                                 <p className="text-xs sm:text-sm opacity-90">Shop your favorite brands.</p>
-                                <button className="mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-white/20 rounded-full text-xs font-bold hover:bg-white/30">
+                                <button className="mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-white/20 rounded-full text-xs font-bold hover:bg-white/30" onClick={() => alert('GLife shopping coming soon!')}>
                                     Shop Now
                                 </button>
                             </div>
@@ -98,19 +107,19 @@ export const WalletApp: React.FC = () => {
 
             {/* Bottom Nav */}
             <div className="bg-white border-t border-slate-100 p-2 flex justify-around text-slate-400">
-                <button className="flex flex-col items-center gap-1 text-blue-600">
+                <button className="flex flex-col items-center gap-1 text-blue-600" onClick={() => alert('Home - Already here!')}>
                     <LayoutGrid size={24} />
                     <span className="text-[10px] font-medium">Home</span>
                 </button>
-                <button className="flex flex-col items-center gap-1 hover:text-blue-600">
+                <button className="flex flex-col items-center gap-1 hover:text-blue-600" onClick={() => alert('QR - Coming soon!')}>
                     <QrCode size={24} />
                     <span className="text-[10px] font-medium">QR</span>
                 </button>
-                <button className="flex flex-col items-center gap-1 hover:text-blue-600">
+                <button className="flex flex-col items-center gap-1 hover:text-blue-600" onClick={() => alert('Activity - Coming soon!')}>
                     <Receipt size={24} />
                     <span className="text-[10px] font-medium">Activity</span>
                 </button>
-                <button className="flex flex-col items-center gap-1 hover:text-blue-600">
+                <button className="flex flex-col items-center gap-1 hover:text-blue-600" onClick={() => alert('Profile - Coming soon!')}>
                     <ShieldCheck size={24} />
                     <span className="text-[10px] font-medium">Profile</span>
                 </button>

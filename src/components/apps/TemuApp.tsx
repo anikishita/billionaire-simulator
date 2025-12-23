@@ -123,18 +123,18 @@ export const TemuApp: React.FC = () => {
 
             {/* Bottom Nav */}
             <div className="bg-white border-t border-slate-200 p-2 flex justify-around text-slate-500 text-[10px]">
-                <div className="flex flex-col items-center gap-1 text-[#fb7701]">
+                <button className="flex flex-col items-center gap-1 text-[#fb7701]" onClick={() => alert('Home - Already here!')}>
                     <span className="font-bold">Home</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Categories - Coming soon!')}>
                     <span>Categories</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('You - Coming soon!')}>
                     <span>You</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
+                </button>
+                <button className="flex flex-col items-center gap-1" onClick={() => alert('Cart - Coming soon!')}>
                     <span>Cart</span>
-                </div>
+                </button>
             </div>
         </div>
     );
