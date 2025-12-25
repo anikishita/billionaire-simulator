@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 import { formatMoney } from '../utils/format';
 import type { WalletType } from '../types';
 import { Lock, ArrowRightLeft, Wallet as WalletIcon } from 'lucide-react';
@@ -16,8 +16,8 @@ export const WalletList: React.FC = () => {
     const wallets = Object.values(state.wallets);
 
     const getIcon = (iconName: string) => {
-        const Icon = (Icons as any)[iconName] || WalletIcon;
-        return Icon;
+        const IconComponent = Icons[iconName as keyof typeof Icons] as React.ComponentType<{ size?: number; className?: string }> || WalletIcon;
+        return IconComponent;
     };
 
     const handleTransfer = (e: React.FormEvent) => {

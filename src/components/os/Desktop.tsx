@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MenuBar } from './MenuBar';
 import { Dock } from './Dock';
 import { Window } from './Window';
+import { AppContainer } from '../AppContainer';
 import { AnimatePresence } from 'framer-motion';
 import {
     Wallet, ShoppingBag, Settings, Globe, Zap, ShoppingCart, Gem,
@@ -68,8 +69,9 @@ export const Desktop: React.FC = () => {
         }
 
         // Open new window
+        const newId = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         const newWindow: WindowState = {
-            id: Date.now().toString(),
+            id: newId,
             appId,
             title: app.label,
             x: 100 + (windows.length * 30),
@@ -175,7 +177,9 @@ export const Desktop: React.FC = () => {
                             onResize={(w, h) => resizeWindow(win.id, w, h)}
                             className={win.appId === 'underground' ? 'bg-white' : 'bg-slate-50'}
                         >
-                            {app.component}
+                            <AppContainer onClose={() => closeWindow(win.id)}>
+                                {app.component}
+                            </AppContainer>
                         </Window>
                     );
                 })}

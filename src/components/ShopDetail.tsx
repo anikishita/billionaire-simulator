@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 import { formatMoney } from '../utils/format';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -17,7 +17,7 @@ export const ShopDetail: React.FC<ShopDetailProps> = ({ shopId, onBack }) => {
     if (!shop) return null;
 
     const wallet = state.wallets[shop.currency];
-    const Icon = (Icons as any)[shop.icon] || Icons.ShoppingBag;
+    const IconComponent = Icons[shop.icon as keyof typeof Icons] as React.ComponentType<{ size?: number; className?: string }> || Icons.ShoppingBag;
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
@@ -53,7 +53,7 @@ export const ShopDetail: React.FC<ShopDetailProps> = ({ shopId, onBack }) => {
                                     'w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br text-white shadow-lg',
                                     shop.theme
                                 )}>
-                                    <Icon size={24} />
+                                    <IconComponent size={24} />
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-lg text-slate-200">{product.name}</h3>
